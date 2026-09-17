@@ -18,20 +18,25 @@ Apple Developer 계정($99/년)은 **필요 없다.** 배포하지 않고 본인
 
 ---
 
-## 1. 프로젝트 폴더 옮기기
+## 1. 프로젝트 가져오기
 
-이 Mac의 `~/Programs/Keyclick/`를 통째로 새 Mac의 같은 위치(아무 데나 무방)로 복사한다.
-AirDrop, USB, git, rsync 무엇이든 상관없다.
+```bash
+git clone https://github.com/minbom/Keyclick.git ~/Programs/Keyclick
+cd ~/Programs/Keyclick
+```
 
-**복사에서 반드시 제외할 것:**
+**private 저장소**이므로 인증이 필요하다. 새 Mac에 `gh`가 있으면 `gh auth login`으로
+한 번 로그인해 두면 되고, 없으면 clone 때 물어보는 암호 자리에 GitHub
+Personal Access Token(scope: `repo`)을 넣는다. keychain이 기억하므로 한 번만 하면 된다.
+
+clone이면 `build/`와 `.signing/`은 `.gitignore`에 있으므로 자동으로 빠진다.
+
+수동 복사(AirDrop, USB, rsync)도 무방하다. 그때는 아래 두 항목을 **반드시 제외한다.**
 
 ```
 build/       빌드 산출물. 새 Mac에서 다시 만든다
 .signing/    개인키가 들어 있다 (아래 설명)
 ```
-
-`.gitignore`에 이미 두 항목이 들어 있으므로 git으로 옮기면 자동으로 빠진다.
-수동 복사라면:
 
 ```bash
 rsync -av --exclude build --exclude .signing \
@@ -124,12 +129,13 @@ open -a /Applications/Keyclick.app
 |---|---|
 | **키 입력 수신 중** | 정상. 아이콘도 선명해진다 |
 | **입력 모니터링 권한 없음 — 소리 안 남** | 4단계 미완료 |
+| **오디오 엔진 정지 — 소리 안 남** | 출력 장치 쪽 문제. [TROUBLESHOOTING 11번](TROUBLESHOOTING.md#11-출력-장치가-바뀌면-소리가-끊긴다) |
 
 메뉴의 **"소리 테스트"**는 권한과 무관하게 소리가 난다.
 따라서 진단이 갈린다:
 
 - 테스트는 나는데 타이핑은 조용함 → **권한 문제**
-- 테스트도 조용함 → **오디오 출력 문제** (볼륨 슬라이더, 출력 장치 확인)
+- 테스트도 조용함 → **오디오 출력 문제** (맨 위 줄, 볼륨 슬라이더, 시스템 출력 장치 확인)
 
 ---
 
@@ -182,7 +188,8 @@ tccutil reset ListenEvent com.minbom.keyclick
 
 `Resources/`의 wav 6개는 [Tickeys](https://github.com/BlueCocoa/Tickeys)의
 Cherry G80-3494 스킴에서 가져온 것이다. **개인 용도로만 쓴다.**
-남에게 배포하거나 공개 저장소에 올리려면 원본 라이선스를 먼저 확인해야 한다.
+`minbom/Keyclick` 저장소를 private으로 둔 이유가 이것이다 — 공개로 바꾸거나 남에게
+배포하려면 원본 라이선스를 먼저 확인하고, wav는 빼는 편이 안전하다.
 
 ---
 
